@@ -1,0 +1,33 @@
+syntax = "proto3";
+option csharp_namespace = "V5RPC.Proto";
+
+message Vector2 {
+    float x = 1;
+    float y = 2;
+}
+
+message TeamInfo {
+    string team_name = 1;
+    //TODO
+}
+
+message Ball {
+    Vector2 position = 1;
+}
+
+message Wheel {
+    float left_speed = 1;
+    float right_speed = 2;
+}
+
+message Robot {
+    Vector2 position = 1;
+    float rotation = 2;
+    Wheel wheel = 3;
+}
+
+message Field {
+    repeated Robot our_robots = 1;
+    repeated Robot opponent_robots = 2;
+    Ball ball = 3;
+}
