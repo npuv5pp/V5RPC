@@ -1,6 +1,7 @@
 syntax = "proto3";
 option csharp_namespace = "V5RPC.Proto";
 import "DataStructures.proto";
+import "Events.proto";
 
 message RPCCall {
     oneof method {
@@ -12,11 +13,8 @@ message RPCCall {
 }
 
 message OnEventCall {
-    //TODO
-}
-
-message OnEventResult{
-    //TODO
+    EventType type = 1;
+	EventArguments arguments = 2;
 }
 
 message GetTeamInfoCall {

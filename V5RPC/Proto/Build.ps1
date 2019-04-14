@@ -37,6 +37,7 @@ Get-ChildItem -Path $outputDir | Where-Object { $_.Extension -eq ".cs" } | Remov
 try {
     Compile-Proto -Path ".\API.proto"
     Compile-Proto -Path ".\DataStructures.proto"
+    Compile-Proto -Path ".\Events.proto"
 }
 catch {
     Write-Error $_

@@ -7,7 +7,7 @@ namespace V5RPC
 {
     public interface IStrategy
     {
-        void OnEvent();//TODO
+        void OnEvent(EventType type, EventArguments arguments);//TODO
         TeamInfo GetTeamInfo();//TODO
         Wheel[] GetInstruction(Field field);
         Robot[] GetPlacement(Field field);

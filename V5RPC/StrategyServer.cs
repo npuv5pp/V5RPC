@@ -39,7 +39,7 @@ namespace V5RPC
             {
                 case RPCCall.MethodOneofCase.OnEvent:
                     //TODO
-                    strategy.OnEvent();
+                    strategy.OnEvent(call.OnEvent.Type, call.OnEvent.Arguments);
                     break;
                 case RPCCall.MethodOneofCase.GetTeamInfo:
                     //TODO
