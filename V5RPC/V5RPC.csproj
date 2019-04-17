@@ -1,10 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<!--
+  V5RPC MSBuild project file
+  Created by AzureFx on 2019/4/16
+-->
+
+<!--We should import the SDK explicitly to get full control over the order-->
+<Project>
+
+  <!--Import props-->
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>V5RPC</Description>
     <Authors>AzureFx</Authors>
-    <Company />
+    <Company>NWPU V5++ Team</Company>
     <Version>0.1.0</Version>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
@@ -17,9 +26,35 @@
     <OutputPath></OutputPath>
   </PropertyGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="cd &quot;$(ProjectDir)Proto\&quot;&#xD;&#xA;powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;Build.ps1&quot;" />
+  <!--Import targets-->
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <!--Begin Protocol Buffer build-->
+  <PropertyGroup>
+    <!--Now we can reference ProjectDir-->
+    <ProtoDir>$(ProjectDir)Proto\</ProtoDir>
+    <GeneratedDir>$(ProtoDir)Generated\</GeneratedDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProtobufCS Include="$(GeneratedDir)*.cs" />
+    <ProtobufState Include="$(GeneratedDir)LastBuildState.txt" />
+    <!--Avoid including the files twice-->
+    <Compile Remove="@(ProtobufCS)" />
+  </ItemGroup>
+
+  <Target Name="CompileProtobuf" BeforeTargets="BeforeCompile">
+    <Exec Command="PowerShell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProtoDir)Build.ps1&quot; -SourceDir &quot;$(ProtoDir.Replace('\','\\'))&quot; -OutputDir &quot;$(GeneratedDir.Replace('\','\\'))&quot; -Lazy" />
+    <ItemGroup>
+      <!--Make MSBuild see the newly generated files-->
+      <Compile Include="$(GeneratedDir)*.cs" />
+    </ItemGroup>
   </Target>
+
+  <Target Name="CleanProtobuf" AfterTargets="Clean">
+    <Delete Files="@(ProtobufCS);@(ProtobufState)" />
+  </Target>
+  <!--End Protocol Buffer build-->
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.7.0" />
