@@ -39,5 +39,5 @@ message GetPlacementCall {
 }
 
 message GetPlacementResult {
-    repeated Robot robots = 1;
+    Placement placement = 1;
 }

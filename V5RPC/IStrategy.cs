@@ -10,6 +10,6 @@ namespace V5RPC
         void OnEvent(EventType type, EventArguments arguments);//TODO
         TeamInfo GetTeamInfo();//TODO
         Wheel[] GetInstruction(Field field);
-        Robot[] GetPlacement(Field field);
+        Placement GetPlacement(Field field);
     }
 }

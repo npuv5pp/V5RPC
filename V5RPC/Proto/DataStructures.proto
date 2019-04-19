@@ -31,3 +31,8 @@ message Field {
     repeated Robot opponent_robots = 2;
     Ball ball = 3;
 }
+
+message Placement { 
+    repeated Robot robots = 1;
+    Ball ball = 2;
+}

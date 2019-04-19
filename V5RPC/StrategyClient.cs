@@ -77,14 +77,14 @@ namespace V5RPC
             return GetInstructionResult.Parser.ParseFrom(ret).Wheels.ToArray();
         }
 
-        public Robot[] GetPlacement(Field field)
+        public Placement GetPlacement(Field field)
         {
             var call = new GetPlacementCall
             {
                 Field = field
             };
             var ret = CallRemote(call);
-            return GetPlacementResult.Parser.ParseFrom(ret).Robots.ToArray();
+            return GetPlacementResult.Parser.ParseFrom(ret).Placement;
         }
     }
 }

@@ -55,7 +55,7 @@ namespace V5RPC
                 case RPCCall.MethodOneofCase.GetPlacement:
                     return new GetPlacementResult
                     {
-                        Robots = { strategy.GetPlacement(call.GetPlacement.Field) }
+                        Placement = strategy.GetPlacement(call.GetPlacement.Field)
                     }.ToByteArray();
             }
             return Nothing;
