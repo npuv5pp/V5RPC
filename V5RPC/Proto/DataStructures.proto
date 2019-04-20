@@ -30,6 +30,8 @@ message Field {
     repeated Robot our_robots = 1;
     repeated Robot opponent_robots = 2;
     Ball ball = 3;
+    int32 tick_total = 4;
+    int32 tick_round = 5;
 }
 
 message Placement { 
