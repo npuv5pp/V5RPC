@@ -18,6 +18,14 @@ function Get-ProtoSource {
     Get-ChildItem -Path $SourceDir -Filter "*.proto"
 }
 
+function Get-ProtoCompiler {
+    $compiler = Get-Command 'protoc.exe' -ErrorAction Ignore
+    if ($null -eq $compiler) {
+        $compiler = Get-Command 'protoc\bin\protoc.exe' -ErrorAction Ignore
+    }
+    return $compiler
+}
+
 $lastBuildStateFile = Join-Path $OutputDir "LastBuildState.txt"
 $latestSourceDate = (Get-ProtoSource | Sort-Object LastWriteTime | Select-Object -Last 1).LastWriteTime
 
@@ -37,7 +45,21 @@ if ($Lazy) {
 
 Write-Output "正在生成 Protocol Buffer 文件"
 
-$compiler = Get-Command "protoc.exe" -ErrorAction Ignore
+$compiler = Get-ProtoCompiler
+if ($null -eq $compiler) {
+    try {
+        Write-Output '正在下载编译器'
+        $url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-win64.zip'
+        Invoke-WebRequest $url -OutFile 'protoc.zip' -ErrorAction Stop
+        Write-Output '正在提取文件'
+        Expand-Archive 'protoc.zip' -ErrorAction Stop
+        Remove-Item 'protoc.zip'
+    }
+    catch {
+        Write-Output "无法从 $url 获得编译器"
+    }
+}
+$compiler = Get-ProtoCompiler
 if ($null -eq $compiler) {
     Write-Output "error: 无法找到 Protocol Buffer 编译器"
     exit 1
