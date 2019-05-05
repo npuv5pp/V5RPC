@@ -6,8 +6,6 @@ enum EventType {
 	JudgeResult = 0;
 	MatchStart = 1;
 	MatchStop = 2;
-	RoundStart = 3;
-	RoundStop = 4;
 }
 
 message EventArguments {
@@ -19,17 +17,15 @@ message EventArguments {
 
 message JudgeResultEvent {
     enum ResultType {
-        PlaceKick = 0;
-        GoalKick = 1;
-        PenaltyKick = 2;
-        FreeKick = 3;
-        NormalMatch = 4;
-    }
-
-    enum Side {
-        Blue = 0;
-        Yellow = 1;
-        Nobody = 2;
+		NormalMatch = 0;
+		EndGame = 1;
+		PlaceKick = 2;
+		GoalKick = 3;
+		PenaltyKick = 4;
+		FreeKickRightTop = 5;
+		FreeKickRightBot = 6;
+		FreeKickLeftTop = 7;
+		FreeKickLeftBot = 8;
     }
 
     ResultType type = 1;
