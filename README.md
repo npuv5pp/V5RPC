@@ -5,6 +5,8 @@ V5RPC module for the Simuro5v5 platform.
 
 TODO
 
+[Chinese Version Here](https://github.com/npuv5pp/V5RPC/blob/master/README.zh-CN.md)
+
 ## Credits
 
 This project is currently maintained by AzureFx. ALL RIGHTS RESERVED.

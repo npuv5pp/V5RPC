@@ -62,6 +62,7 @@
   
   <PropertyGroup>
     <CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
+    <Copyright>Copyright (C) AzureFx. ALL RIGHTS RESERVED.</Copyright>
   </PropertyGroup>
 
 </Project>
