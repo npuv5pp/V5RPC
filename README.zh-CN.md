@@ -91,7 +91,7 @@ struct Robot
 end
 
 struct Field
-    ourRobots::Array{Robot}#5
+    selfRobots::Array{Robot}#5
     opponentRobots::Array{Robot}#5
     ball::Ball
     tick::Int32
@@ -121,25 +121,23 @@ end
 ```julia
 struct JudgeResultEvent
     type::ResultType
-    actor::Side
+    offensiveTeam::Team
     reason::String
 end
 
 @enum ResultType begin
-    NormalMatch = 0
-    EndGame = 1
-    PlaceKick = 2
-    GoalKick = 3
-    PenaltyKick = 4
-    FreeKickRightTop = 5
-    FreeKickRightBot = 6
-    FreeKickLeftTop = 7
-    FreeKickLeftBot = 8
+    PlaceKick = 0
+    GoalKick = 1
+    PenaltyKick = 2
+    FreeKickRightTop = 3
+    FreeKickRightBot = 4
+    FreeKickLeftTop = 5
+    FreeKickLeftBot = 6
 end
 
-@enum Side begin
-    Yellow = 0
-    Blue = 1
+@enum Team begin
+    Self = 0
+    Opponent = 1
     None = 2
 end
 ```
