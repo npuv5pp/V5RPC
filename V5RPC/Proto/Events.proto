@@ -17,18 +17,16 @@ message EventArguments {
 
 message JudgeResultEvent {
     enum ResultType {
-		NormalMatch = 0;
-		EndGame = 1;
-		PlaceKick = 2;
-		GoalKick = 3;
-		PenaltyKick = 4;
-		FreeKickRightTop = 5;
-		FreeKickRightBot = 6;
-		FreeKickLeftTop = 7;
-		FreeKickLeftBot = 8;
+		PlaceKick = 0;
+		GoalKick = 1;
+		PenaltyKick = 2;
+		FreeKickRightTop = 3;
+		FreeKickRightBot = 4;
+		FreeKickLeftTop = 5;
+		FreeKickLeftBot = 6;
     }
 
     ResultType type = 1;
-    Side actor = 2;
+    Team offensive_team = 2;
     string reason = 3;
 }
