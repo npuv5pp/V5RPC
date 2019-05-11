@@ -15,6 +15,7 @@ namespace V5RPC
         UdpClient udpClient;
         bool isDisposed = false;
         public IPEndPoint Server { get; set; }
+        public bool PrintDebugInfo { get; set; } = true;
 
         public V5Client(int port = 0)
         {
@@ -59,9 +60,9 @@ namespace V5RPC
                             return packet.payload;
                         }
                     }
-                    catch (Exception e)
+                    catch (SocketException e)
                     {
-                        Console.WriteLine(e);
+                        if (PrintDebugInfo) { Console.WriteLine(e.Message); }
                     }
                 }
             }, cts.Token);
@@ -108,6 +109,8 @@ namespace V5RPC
         bool isDisposed = false;
         bool breakFlag = false;
         CacheItem lastResponse;
+
+        public bool PrintDebugInfo { get; set; } = true;
 
         public V5Server(int port)
         {
@@ -161,9 +164,9 @@ namespace V5RPC
                         udpClient.Send(buffer, buffer.Length, endPoint);
                     }
                 }
-                catch (Exception e)
+                catch (SocketException e)
                 {
-                    Console.WriteLine(e);
+                    if (PrintDebugInfo) { Console.WriteLine(e.Message); }
                 }
             }
         }
