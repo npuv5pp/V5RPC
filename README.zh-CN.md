@@ -108,12 +108,20 @@ end
     JudgeResult = 0
     MatchStart = 1
     MatchStop = 2
+	FirstHalfStart = 3
+	SecondHalfStart = 4
+	OvertimeStart = 5
+	PenaltyShootoutStart = 6
 end
 ```
 
 - **JudgeResult**：当平台公布裁判结果时发送。参数类型为`JudgeResultEvent`。
 - **MatchStart**：当比赛开始时发送。没有参数。
 - **MatchStop**：当比赛结束时发送。没有参数。
+- **FirstHalfStart**：当上半场开始时发送。没有参数。
+- **SecondHalfStart**：当下半场开始时发送。没有参数。
+- **OvertimeStart**：当加时赛开始时发送。没有参数。
+- **PenaltyShootoutStart**：当点球大战开始时发送。没有参数。
 
 可能的事件参数如下：
 
