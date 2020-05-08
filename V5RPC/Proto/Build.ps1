@@ -19,7 +19,7 @@ function Get-ProtoSource {
 }
 
 function Get-ProtoCompiler {
-    $compiler = Get-Command 'protoc.exe' -ErrorAction Ignore
+    $compiler = Get-Command 'protoc' -ErrorAction Ignore
     if ($null -eq $compiler) {
         $compiler = Get-Command 'protoc\bin\protoc.exe' -ErrorAction Ignore
     }
