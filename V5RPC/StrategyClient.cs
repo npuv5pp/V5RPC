@@ -67,14 +67,15 @@ namespace V5RPC
             return GetTeamInfoResult.Parser.ParseFrom(ret).TeamInfo;
         }
 
-        public Wheel[] GetInstruction(Field field)
+        public (Wheel[], ControlInfo) GetInstruction(Field field)
         {
             var call = new GetInstructionCall
             {
                 Field = field
             };
             var ret = CallRemote(call);
-            return GetInstructionResult.Parser.ParseFrom(ret).Wheels.ToArray();
+            var result = GetInstructionResult.Parser.ParseFrom(ret);
+            return (result.Wheels.ToArray(), result.Command);
         }
 
         public Placement GetPlacement(Field field)

@@ -37,7 +37,7 @@ void OnEvent(EventType type, EventArguments arguments);
 
 TeamInfo GetTeamInfo();
 
-Wheel[] GetInstruction(Field field);
+(Wheel[], ControlInfo) GetInstruction(Field field);
 
 Placement GetPlacement(Field field);
 ```

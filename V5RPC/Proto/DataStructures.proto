@@ -43,3 +43,12 @@ message Placement {
     repeated Robot robots = 1;
     Ball ball = 2;
 }
+
+enum ControlType {
+    Continue = 0;
+    Reset = 1;
+}
+
+message ControlInfo {
+    ControlType command = 1;
+}

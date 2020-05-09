@@ -32,6 +32,7 @@ message GetInstructionCall {
 
 message GetInstructionResult {
     repeated Wheel wheels = 1;
+    ControlInfo command = 2;
 }
 
 message GetPlacementCall {

@@ -48,9 +48,11 @@ namespace V5RPC
                         TeamInfo = strategy.GetTeamInfo()
                     }.ToByteArray();
                 case RPCCall.MethodOneofCase.GetInstruction:
+                    var (wheels, controlInfo) = strategy.GetInstruction(call.GetInstruction.Field);
                     return new GetInstructionResult
                     {
-                        Wheels = { strategy.GetInstruction(call.GetInstruction.Field) }
+                        Wheels = { wheels },
+                        Command = controlInfo,
                     }.ToByteArray();
                 case RPCCall.MethodOneofCase.GetPlacement:
                     return new GetPlacementResult
