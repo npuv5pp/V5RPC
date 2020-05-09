@@ -1,16 +1,14 @@
 ﻿using Google.Protobuf;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using V5RPC.Proto;
 
 namespace V5RPC
 {
     public class StrategyClient : IStrategy, IDisposable
     {
-        V5Client client;
+        readonly V5Client client;
         public int Timeout { get; set; } = 10000;
         public int RetryInterval { get; set; } = 50;
 
@@ -27,7 +25,7 @@ namespace V5RPC
             client.Dispose();
         }
 
-        private byte[] CallRemote<MSG>(MSG message) where MSG : IMessage
+        private byte[] CallRemote<TMsg>(TMsg message) where TMsg : IMessage
         {
             var rpc = new RPCCall();
             switch (message)

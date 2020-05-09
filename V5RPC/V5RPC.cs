@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -12,7 +9,7 @@ namespace V5RPC
 {
     public class V5Client : IDisposable
     {
-        UdpClient udpClient;
+        readonly UdpClient udpClient;
         bool isDisposed = false;
         public IPEndPoint Server { get; set; }
         public bool PrintDebugInfo { get; set; } = true;
@@ -105,7 +102,7 @@ namespace V5RPC
 
     public class V5Server : IDisposable
     {
-        UdpClient udpClient;
+        readonly UdpClient udpClient;
         bool isDisposed = false;
         bool breakFlag = false;
         CacheItem lastResponse;
@@ -281,8 +278,8 @@ namespace V5RPC
         }
         public bool Reply
         {
-            get { return CheckFlag(REPLY_MASK); }
-            set { AssignFlag(REPLY_MASK, value); }
+            get => CheckFlag(REPLY_MASK);
+            set => AssignFlag(REPLY_MASK, value);
         }
     }
 
