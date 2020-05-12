@@ -35,7 +35,7 @@
 ```csharp
 void OnEvent(EventType type, EventArguments arguments);
 
-TeamInfo GetTeamInfo();
+TeamInfo GetTeamInfo(ServerInfo);
 
 (Wheel[], ControlInfo) GetInstruction(Field field);
 

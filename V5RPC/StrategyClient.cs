@@ -58,9 +58,12 @@ namespace V5RPC
             CallRemote(call);
         }
 
-        public TeamInfo GetTeamInfo()
+        public TeamInfo GetTeamInfo(ServerInfo info)
         {
-            var call = new GetTeamInfoCall();
+            var call = new GetTeamInfoCall()
+            {
+                ServerInfo = { Version = V5RPC.Proto.Version.V11 }
+            };
             var ret = CallRemote(call);
             return GetTeamInfoResult.Parser.ParseFrom(ret).TeamInfo;
         }
