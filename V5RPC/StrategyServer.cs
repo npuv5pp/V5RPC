@@ -39,7 +39,7 @@ namespace V5RPC
                     strategy.OnEvent(call.OnEvent.Type, call.OnEvent.Arguments);
                     break;
                 case RPCCall.MethodOneofCase.GetTeamInfo:
-                    var info = strategy.GetTeamInfo(call.GetTeamInfo.ServerInfo);
+                    var info = strategy.GetTeamInfo(call.GetTeamInfo.ServerVersion);
                     info.Version = V5RPC.Proto.Version.V11;
                     return new GetTeamInfoResult
                     {
