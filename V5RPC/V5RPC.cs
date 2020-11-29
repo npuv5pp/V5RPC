@@ -23,6 +23,7 @@ namespace V5RPC
             try
             {
                 tcpClient.Connect(server);
+                tcpClient.ReceiveTimeout = 100000;
             }
             catch (SocketException e)
             {
@@ -111,8 +112,8 @@ namespace V5RPC
 
     public class V5Server : IDisposable
     {
-        readonly TcpClient tcpClient;
         readonly TcpListener tcpListener;
+        private TcpClient tcpClient;
         bool isDisposed = false;
         bool breakFlag = false;
         CacheItem lastResponse;
@@ -123,7 +124,6 @@ namespace V5RPC
         {
             tcpListener = new TcpListener(IPAddress.Parse("0.0.0.0"), port);
             tcpListener.Start();
-            tcpClient = tcpListener.AcceptTcpClient();
         }
 
         public delegate byte[] Procedure(byte[] parameter);
@@ -134,7 +134,16 @@ namespace V5RPC
             {
                 throw new ObjectDisposedException("V5Server");
             }
-            breakFlag = false;
+
+            try
+            {
+                tcpListener.Start();
+                tcpClient = tcpListener.AcceptTcpClient();
+            }
+            catch (SocketException e)
+            {
+                if (PrintDebugInfo) { Console.WriteLine(e.Message); }
+            }
             while (!isDisposed && !breakFlag)
             {
                 try
@@ -190,7 +199,12 @@ namespace V5RPC
         {
             if (!isDisposed)
             {
-                tcpClient.Dispose();
+                tcpListener.Stop();
+                if (tcpClient != null)
+                {
+                    tcpClient.Dispose();
+                    tcpClient = null;
+                }
                 isDisposed = true;
             }
         }
