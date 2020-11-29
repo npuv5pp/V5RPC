@@ -12,16 +12,25 @@ namespace V5RPC
 {
     public class V5Client : IDisposable
     {
-        UdpClient udpClient;
+        readonly TcpClient tcpClient;
         bool isDisposed = false;
         public IPEndPoint Server { get; set; }
         public bool PrintDebugInfo { get; set; } = true;
 
-        public V5Client(int port = 0)
+        public V5Client(IPEndPoint server)
         {
-            udpClient = new UdpClient(port);
+            tcpClient = new TcpClient();
+            try
+            {
+                tcpClient.Connect(server);
+            }
+            catch (SocketException e)
+            {
+                if (PrintDebugInfo) { Console.WriteLine(e.Message); }
+            }
+            
         }
-
+        
         public byte[] Call(byte[] payload, int timeout = 10000, int retryInterval = 50)
         {
             var server = Server;
@@ -40,7 +49,7 @@ namespace V5RPC
             }
             void SendMe()
             {
-                udpClient.Send(outBuffer, outBuffer.Length, server);
+                tcpClient.GetStream().Write(outBuffer, 0, outBuffer.Length);
             }
             var timeoutState = new TaskCompletionSource<bool>();
             var cts = new CancellationTokenSource();
@@ -52,7 +61,8 @@ namespace V5RPC
                     try
                     {
                         IPEndPoint remote = new IPEndPoint(IPAddress.Any, 0);
-                        var inBuffer = udpClient.Receive(ref remote);
+                        byte[] inBuffer = new byte[512];
+                        tcpClient.GetStream().Read(inBuffer, 0, inBuffer.Length);
                         var io = new MemoryStream(inBuffer);
                         var packet = io.ReadV5Packet();
                         if (packet.Reply && packet.requestId == outGuid)
@@ -92,20 +102,17 @@ namespace V5RPC
             }
             return receiverTask.Result;
         }
-
         public void Dispose()
         {
-            if (!isDisposed)
-            {
-                udpClient.Dispose();
-                isDisposed = true;
-            }
+            tcpClient.Dispose();
+            isDisposed = true;
         }
     }
 
     public class V5Server : IDisposable
     {
-        UdpClient udpClient;
+        readonly TcpClient tcpClient;
+        readonly TcpListener tcpListener;
         bool isDisposed = false;
         bool breakFlag = false;
         CacheItem lastResponse;
@@ -114,7 +121,9 @@ namespace V5RPC
 
         public V5Server(int port)
         {
-            udpClient = new UdpClient(port);
+            tcpListener = new TcpListener(IPAddress.Parse("0.0.0.0"), port);
+            tcpListener.Start();
+            tcpClient = tcpListener.AcceptTcpClient();
         }
 
         public delegate byte[] Procedure(byte[] parameter);
@@ -133,7 +142,8 @@ namespace V5RPC
                     var endPoint = new IPEndPoint(IPAddress.Any, 0);
                     V5Packet inPacket;
                     {
-                        var buffer = udpClient.Receive(ref endPoint);
+                        byte[] buffer = new byte[512];
+                        tcpClient.GetStream().Read(buffer, 0, buffer.Length);
                         using (var io = new MemoryStream(buffer))
                         {
                             inPacket = io.ReadV5Packet();
@@ -161,7 +171,7 @@ namespace V5RPC
                         var io = new MemoryStream();
                         io.Write(outPacket);
                         var buffer = io.ToArray();
-                        udpClient.Send(buffer, buffer.Length, endPoint);
+                        tcpClient.GetStream().Write(buffer, 0, buffer.Length);
                     }
                 }
                 catch (SocketException e)
@@ -180,7 +190,7 @@ namespace V5RPC
         {
             if (!isDisposed)
             {
-                udpClient.Dispose();
+                tcpClient.Dispose();
                 isDisposed = true;
             }
         }

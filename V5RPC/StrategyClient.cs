@@ -16,7 +16,7 @@ namespace V5RPC
 
         public StrategyClient(IPEndPoint server, int port = 0)
         {
-            client = new V5Client(port)
+            client = new V5Client(server)
             {
                 Server = server
             };
