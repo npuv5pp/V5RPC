@@ -23,7 +23,6 @@ namespace V5RPC
             try
             {
                 tcpClient.Connect(server);
-                tcpClient.ReceiveTimeout = 100000;
             }
             catch (SocketException e)
             {
