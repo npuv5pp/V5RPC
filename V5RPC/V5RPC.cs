@@ -32,7 +32,7 @@ namespace V5RPC
             
         }
         
-        public byte[] Call(byte[] payload, int timeout = 10000, int retryInterval = 50)
+        public byte[] Call(byte[] payload, int timeout = 10000, int retryInterval = 1000)
         {
             var server = Server;
             if (server == null)
