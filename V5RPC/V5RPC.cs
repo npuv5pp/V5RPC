@@ -66,10 +66,10 @@ namespace V5RPC
                         tcpClient.GetStream().Read(inBuffer, 0, inBuffer.Length);
                         var io = new MemoryStream(inBuffer);
                         var packet = io.ReadV5Packet();
-                        // if (packet.Reply && packet.requestId == outGuid)
-                        // {
-                        return packet.payload;
-                        // }
+                        if (packet.Reply && packet.requestId == outGuid)
+                        {
+                            return packet.payload;
+                        }
                     }
                     catch (SocketException e)
                     {
@@ -161,20 +161,20 @@ namespace V5RPC
                     }
 
                     byte[] response;
-                    // if (lastResponse.requestId == inPacket.requestId)
-                    // {
-                    //     response = lastResponse.response;
-                    // }
-                    // else
-                    // {
-                    response = proc(inPacket.payload);
-                    if (response == null)
+                    if (lastResponse.requestId == inPacket.requestId)
                     {
-                        response = new byte[0];
+                        response = lastResponse.response;
                     }
-                    lastResponse.requestId = inPacket.requestId;
-                    lastResponse.response = response;
-                    // }
+                    else
+                    {
+                        response = proc(inPacket.payload);
+                        if (response == null)
+                        {
+                            response = new byte[0];
+                        }
+                        lastResponse.requestId = inPacket.requestId;
+                        lastResponse.response = response;
+                    }
 
                     {
                         V5Packet outPacket = V5Packet.MakeResponsePacket(response, inPacket.requestId);
