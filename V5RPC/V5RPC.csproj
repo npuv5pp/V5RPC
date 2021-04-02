@@ -34,6 +34,9 @@
     <!--Now we can reference ProjectDir-->
     <ProtoDir>$(ProjectDir)Proto\</ProtoDir>
     <GeneratedDir>$(ProtoDir)Generated\</GeneratedDir>
+    <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">PowerShell.exe</IsWindows>
+    <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">pwsh</IsOSX>
+    <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">pwsh</IsLinux>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,7 +47,7 @@
   </ItemGroup>
 
   <Target Name="CompileProtobuf" BeforeTargets="BeforeCompile">
-    <Exec Command="PowerShell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProtoDir)Build.ps1&quot; -SourceDir &quot;$(ProtoDir.Replace('\','\\'))&quot; -OutputDir &quot;$(GeneratedDir.Replace('\','\\'))&quot; -Lazy" />
+    <Exec Command="$(IsWindows) $(IsOSX) $(IsLinux) -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProtoDir)Build.ps1&quot; -SourceDir &quot;$(ProtoDir.Replace('\','\\'))&quot; -OutputDir &quot;$(GeneratedDir.Replace('\','\\'))&quot; -Lazy" />
     <ItemGroup>
       <!--Make MSBuild see the newly generated files-->
       <Compile Include="$(GeneratedDir)*.cs" />
