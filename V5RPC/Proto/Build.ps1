@@ -23,8 +23,8 @@ function Get-ProtoCompiler {
     if ($null -eq $compiler) {
         if($IsLinux -Or $IsMacOs) {
             $compiler = Get-Command '.\protoc\bin\protoc' -ErrorAction Ignore
-            if(-not ($null -eq $compiler)) {
-                chmod +x $compiler
+            if($null -ne $compiler) {
+                chmod +x $compiler.Source
             }
         } elseif($IsWindows) {
             $compiler = Get-Command 'protoc\bin\protoc.exe' -ErrorAction Ignore
