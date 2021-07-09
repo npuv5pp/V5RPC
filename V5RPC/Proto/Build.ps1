@@ -19,9 +19,16 @@ function Get-ProtoSource {
 }
 
 function Get-ProtoCompiler {
-    $compiler = Get-Command 'protoc' -ErrorAction Ignore
+    $compiler = Get-Command 'protoc.exe' -ErrorAction Ignore
     if ($null -eq $compiler) {
-        $compiler = Get-Command 'protoc\bin\protoc.exe' -ErrorAction Ignore
+        if($IsLinux -Or $IsMacOs) {
+            $compiler = Get-Command '.\protoc\bin\protoc' -ErrorAction Ignore
+            if($null -ne $compiler) {
+                chmod +x $compiler.Source
+            }
+        } elseif($IsWindows) {
+            $compiler = Get-Command 'protoc\bin\protoc.exe' -ErrorAction Ignore
+        }
     }
     return $compiler
 }
@@ -49,7 +56,7 @@ $compiler = Get-ProtoCompiler
 if ($null -eq $compiler) {
     try {
         Write-Output '正在下载编译器'
-        $url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-win64.zip'
+        $url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-win64.zip'
         Invoke-WebRequest $url -OutFile 'protoc.zip' -ErrorAction Stop
         Write-Output '正在提取文件'
         Expand-Archive 'protoc.zip' -ErrorAction Stop
