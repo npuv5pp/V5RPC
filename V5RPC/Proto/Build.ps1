@@ -56,10 +56,16 @@ $compiler = Get-ProtoCompiler
 if ($null -eq $compiler) {
     try {
         Write-Output '正在下载编译器'
-        $url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-win64.zip'
+        if($IsLinux) {
+            $url='https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-linux-x86_64.zip'
+        } elseif($IsMacOs) {
+            $url='https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-osx-x86_64.zip'
+        } elseif($IsWindows) {
+            $url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-win64.zip'
+        }
         Invoke-WebRequest $url -OutFile 'protoc.zip' -ErrorAction Stop
         Write-Output '正在提取文件'
-        Expand-Archive 'protoc.zip' -ErrorAction Stop
+        Expand-Archive -Force 'protoc.zip' -ErrorAction Stop
         Remove-Item 'protoc.zip'
     }
     catch {
