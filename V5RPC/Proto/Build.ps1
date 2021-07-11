@@ -26,7 +26,7 @@ function Get-ProtoCompiler {
             if($null -ne $compiler) {
                 chmod +x $compiler.Source
             }
-        } elseif($IsWindows) {
+        } else {
             $compiler = Get-Command 'protoc\bin\protoc.exe' -ErrorAction Ignore
         }
     }
@@ -60,7 +60,7 @@ if ($null -eq $compiler) {
             $url='https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip'
         } elseif($IsMacOs) {
             $url='https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-osx-x86_64.zip'
-        } elseif($IsWindows) {
+        } else {
             $url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-win64.zip'
         }
         Invoke-WebRequest $url -OutFile 'protoc.zip' -ErrorAction Stop
