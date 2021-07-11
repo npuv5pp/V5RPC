@@ -57,11 +57,11 @@ if ($null -eq $compiler) {
     try {
         Write-Output '正在下载编译器'
         if($IsLinux) {
-            $url='https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-linux-x86_64.zip'
+            $url='https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip'
         } elseif($IsMacOs) {
-            $url='https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-osx-x86_64.zip'
+            $url='https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-osx-x86_64.zip'
         } elseif($IsWindows) {
-            $url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.7.1/protoc-3.7.1-win64.zip'
+            $url = 'https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-win64.zip'
         }
         Invoke-WebRequest $url -OutFile 'protoc.zip' -ErrorAction Stop
         Write-Output '正在提取文件'
