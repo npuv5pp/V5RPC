@@ -23,7 +23,7 @@ jobs:
         dotnet-version: 3.1.101
     - name: Setup protoc
       if: runner.os == 'Linux'
-      uses: arduino/setup-protoc@v1.1.0
+      uses: arduino/setup-protoc@v1.1.2
       with:
         version: 3.11.4
     - name: Install dependencies
