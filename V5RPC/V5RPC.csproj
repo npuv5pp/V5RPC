@@ -31,36 +31,16 @@
 
   <!--Begin Protocol Buffer build-->
   <PropertyGroup>
-    <!--Now we can reference ProjectDir-->
     <ProtoDir>$(ProjectDir)Proto\</ProtoDir>
-    <GeneratedDir>$(ProtoDir)Generated\</GeneratedDir>
-    <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">PowerShell.exe</IsWindows>
-    <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">pwsh</IsOSX>
-    <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">pwsh</IsLinux>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProtobufCS Include="$(GeneratedDir)*.cs" />
-    <ProtobufState Include="$(GeneratedDir)LastBuildState.txt" />
-    <!--Avoid including the files twice-->
-    <Compile Remove="@(ProtobufCS)" />
-  </ItemGroup>
-
-  <Target Name="CompileProtobuf" BeforeTargets="BeforeCompile">
-    <Exec Command="$(IsWindows) $(IsOSX) $(IsLinux) -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProtoDir)Build.ps1&quot; -SourceDir &quot;$(ProtoDir.Replace('\','\\'))&quot; -OutputDir &quot;$(GeneratedDir.Replace('\','\\'))&quot; -Lazy" />
-    <ItemGroup>
-      <!--Make MSBuild see the newly generated files-->
-      <Compile Include="$(GeneratedDir)*.cs" />
-    </ItemGroup>
-  </Target>
-
-  <Target Name="CleanProtobuf" AfterTargets="Clean">
-    <Delete Files="@(ProtobufCS);@(ProtobufState)" />
-  </Target>
-  <!--End Protocol Buffer build-->
-
-  <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+    <PackageReference Include="Google.Protobuf" Version="3.19.1" />
+    <PackageReference Include="Grpc.Tools" Version="2.42.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <Protobuf Include="$(ProtoDir)*.proto" ProtoRoot="$(ProtoDir)" GrpcServices="None"/>
   </ItemGroup>
   
   <PropertyGroup>
