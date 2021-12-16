@@ -10,6 +10,8 @@ enum EventType {
 	SecondHalfStart = 4;
 	OvertimeStart = 5;
 	PenaltyShootoutStart = 6;
+	MatchShootOutStart = 7;
+	MatchBlockStart = 8;
 }
 
 message EventArguments {
